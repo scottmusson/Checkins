@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<file_events>
+    <event date="1340655983000" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="dev1" />
+    <event date="1340655983001" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="dev1" />
+    <event date="1340655983002" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="dev1" />
+    <event date="1340655983003" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="dev2" />
+    <event date="1340655983004" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="dev2" />
+    <event date="1340655983005" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="dev2" />
+    <event date="1340655983006" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="dev3" />
+    <event date="1340655983007" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="dev4" />
+    <event date="1340655983008" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="dev5" />
+</file_events>
