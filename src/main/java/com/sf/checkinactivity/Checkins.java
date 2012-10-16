@@ -231,24 +231,4 @@ public class Checkins {
     public Map<DAYS_OF_WEEK, Map<String, List<List<String>>>> getDetailedCheckinPerDevPerDayOfWeek() {
         return detailedCheckinPerDevPerDayOfWeek;
     }
-    public static void main(String[] args) {
-        if (args.length > 0) {
-            Checkins checkins = new Checkins();
-            try {
-                checkins.parse(args[0], args[1], args[2]);
-                for (DAYS_OF_WEEK days_of_week : DAYS_OF_WEEK.values()) {
-                    System.out.println(days_of_week + ": " + checkins.totalForDay(days_of_week));
-                }
-                List<String> list = checkins.devWithFewestForDay(DAYS_OF_WEEK.THURSDAY);
-                for (String s : list) {
-                    System.out.println(s);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.err.println("Usage: Checkins <depot xml file>");
-        }
-    }
 }
