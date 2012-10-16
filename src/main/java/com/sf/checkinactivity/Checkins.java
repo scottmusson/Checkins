@@ -10,6 +10,8 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,15 +38,25 @@ public class Checkins {
     private Map<DAYS_OF_WEEK, Integer> numberOfCheckinsPerDayOfWeekPerDev = new HashMap<DAYS_OF_WEEK, Integer>();
     private Set<String> developers = new TreeSet<String>();
 
+    public void parse(String fileName) throws IOException, SAXException, ParseException {
+        parse(fileName, null, null);
+    }
     /**
-     * Create a map, with the key being a timestamp and the value being a map of the developer, to their list of files.
-     * @param fileName an xml file created from P4 checkin logs
-     * @throws IOException
-     * @throws SAXException
-     */
-    public void parse(String fileName) throws IOException, SAXException {
+    * Create a map, with the key being a timestamp and the value being a map of the developer, to their list of files.
+    * @param fileName an xml file created from P4 checkin logs
+    * @throws IOException
+    * @throws SAXException
+    */
+    public void parse(String fileName, String startDate, String endDate) throws IOException, SAXException, ParseException {
         File file = new File(fileName);
         if (file.exists()) {
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            // 1995
+            Date start = startDate != null ? formatter.parse(startDate) : new Date(814180700000L);
+            System.err.println(start);
+            Date end = endDate != null ? formatter.parse(endDate) : new Date();
+            System.err.println(end);
+
             DOMParser parser = new DOMParser();
             parser.parse(file.toString());
             Document doc = parser.getDocument();
@@ -59,23 +71,25 @@ public class Checkins {
                             Node date = attributes.getNamedItem("date");
                             if (date != null) {
                                 Long timeInMillis = Long.valueOf(date.getNodeValue());
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-                                cal.setTimeInMillis(timeInMillis);
-                                LOGGER.log(Level.INFO, "Day: " + cal.get(Calendar.DAY_OF_WEEK));
-                                Map<String, List<String>> devs = dateMap.get(cal);
-                                if (devs == null) {
-                                    devs = new HashMap<String, List<String>>();
-                                    dateMap.put(cal, devs);
+                                if (timeInMillis >= start.getTime() && timeInMillis <= end.getTime()) {
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                                    cal.setTimeInMillis(timeInMillis);
+                                    LOGGER.log(Level.INFO, "Day: " + cal.get(Calendar.DAY_OF_WEEK));
+                                    Map<String, List<String>> devs = dateMap.get(cal);
+                                    if (devs == null) {
+                                        devs = new HashMap<String, List<String>>();
+                                        dateMap.put(cal, devs);
+                                    }
+                                    String developer = attributes.getNamedItem("author").getNodeValue();
+                                    developers.add(developer);
+                                    List<String> filesForDev = devs.get(developer);
+                                    if (filesForDev == null) {
+                                        filesForDev = new ArrayList<String>();
+                                        devs.put(developer, filesForDev);
+                                    }
+                                    filesForDev.add(attributes.getNamedItem("filename").getNodeValue());
                                 }
-                                String developer = attributes.getNamedItem("author").getNodeValue();
-                                developers.add(developer);
-                                List<String> filesForDev = devs.get(developer);
-                                if (filesForDev == null) {
-                                    filesForDev = new ArrayList<String>();
-                                    devs.put(developer, filesForDev);
-                                }
-                                filesForDev.add(attributes.getNamedItem("filename").getNodeValue());
                             }
                         }
                     }
@@ -221,7 +235,7 @@ public class Checkins {
         if (args.length > 0) {
             Checkins checkins = new Checkins();
             try {
-                checkins.parse(args[0]);
+                checkins.parse(args[0], args[1], args[2]);
                 for (DAYS_OF_WEEK days_of_week : DAYS_OF_WEEK.values()) {
                     System.out.println(days_of_week + ": " + checkins.totalForDay(days_of_week));
                 }
@@ -230,9 +244,7 @@ public class Checkins {
                     System.out.println(s);
                 }
 
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {

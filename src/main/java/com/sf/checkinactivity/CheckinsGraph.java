@@ -195,19 +195,17 @@ public class CheckinsGraph
         if (args.length > 0) {
             Checkins checkins = new Checkins();
             try {
-                checkins.parse(args[0]);
+                checkins.parse(args[0], args.length > 1 ? args[1] : null, args.length > 2 ? args[2] : null);
 
                 CheckinsGraph demo = new CheckinsGraph("Total Checkins per Day", checkins);
                 demo.pack();
                 RefineryUtilities.centerFrameOnScreen(demo);
                 demo.setVisible(true);
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            System.err.println("Usage: Checkins <depot xml file>");
+            System.err.println("Usage: Checkins <depot xml file> or Checkins <depot xml file> <startDate e.g. 12/1/2011> or Checkins <depot xml file> <startDate e.g. 12/1/2012> <endDate>");
         }
     }
 }
