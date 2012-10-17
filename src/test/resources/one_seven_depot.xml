@@ -1,33 +1,33 @@
 <?xml version="1.0"?>
 <file_events>
-    <!-- Sunday -->
+    <!-- Sunday 10/7/2012 -->
     <event date="1349601500000" filename="//checkins/main/core/platformservices/test/func/ftest-inventory.xml" author="testdev" />
-    <!-- Monday -->
+    <!-- Monday 10/8/2012 -->
     <event date="1349687900000" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="testdev" />
     <event date="1349687900001" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/logging/PlatformServicesEnvironmentHubLogLineHelperTest.java" author="testdev" />
-    <!-- Tuesday -->
+    <!-- Tuesday 10/9/2012 -->
     <event date="1349774300000" filename="//checkins/main/core/platformservices/test/func/ftest-inventory.xml" author="testdev" />
     <event date="1349774300001" filename="//checkins/main/core/platformservices/test/func/ftest-inventory.xml" author="testdev" />
     <event date="1349774300002" filename="//checkins/main/core/platformservices/test/func/ftest-inventory.xml" author="testdev" />
-    <!-- Wednesday -->
+    <!-- Wednesday 10/10/2012 -->
     <event date="1349860700000" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="testdev" />
     <event date="1349860700001" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="testdev" />
     <event date="1349860700002" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="testdev" />
     <event date="1349860700003" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/realm/CurrentOrgInfoUtilTest.java" author="testdev" />
-    <!-- Thursday -->
+    <!-- Thursday 10/11/2012 -->
     <event date="1349947100000" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMemberUiTester.java" author="testdev" />
     <event date="1349947100001" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMemberUiTester.java" author="testdev" />
     <event date="1349947100002" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMemberUiTester.java" author="testdev" />
     <event date="1349947100003" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMemberUiTester.java" author="testdev" />
     <event date="1349947100004" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMemberUiTester.java" author="testdev" />
-    <!-- Friday -->
+    <!-- Friday 10/12/2012 -->
     <event date="1350033500000" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubUiTester.java" author="testdev" />
     <event date="1350033500001" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubUiTester.java" author="testdev" />
     <event date="1350033500002" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubUiTester.java" author="testdev" />
     <event date="1350033500003" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubUiTester.java" author="testdev" />
     <event date="1350033500004" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubUiTester.java" author="testdev" />
     <event date="1350033500005" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubUiTester.java" author="testdev" />
-    <!-- Saturday -->
+    <!-- Saturday 10/13/2012 -->
     <event date="1350119900000" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMembersUiTester.java" author="testdev" />
     <event date="1350119900001" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMembersUiTester.java" author="testdev" />
     <event date="1350119900002" filename="//checkins/main/core/platformservices/test/func/java/src/com/force/platform/framework/environment/ui/tester/EnvironmentHubMembersUiTester.java" author="testdev" />

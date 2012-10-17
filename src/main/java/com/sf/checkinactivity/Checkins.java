@@ -24,10 +24,12 @@ public class Checkins {
 
     public enum DAYS_OF_WEEK {
         SUNDAY("Sunday"), MONDAY("Monday"), TUESDAY("Tuesday"), WEDNESDAY("Wednesday"), THURSDAY("Thursday"), FRIDAY("Friday"), SATURDAY("Saturday");
+
+        private String day;
+
         private DAYS_OF_WEEK(final String day) {
             this.day = day;
         }
-        private String day;
         @Override
         public String toString() {
             return day;
@@ -41,12 +43,16 @@ public class Checkins {
     public void parse(String fileName) throws IOException, SAXException, ParseException {
         parse(fileName, null, null);
     }
+
     /**
-    * Create a map, with the key being a timestamp and the value being a map of the developer, to their list of files.
-    * @param fileName an xml file created from P4 checkin logs
-    * @throws IOException
-    * @throws SAXException
-    */
+     * Parse an xml file that has the checkins for the given date range.  Null for start date is a date in 1995, and null for end date is *now*.
+     * @param fileName
+     * @param startDate on or after this midnight of the startDate PT.
+     * @param endDate specification of an end date will be everything before midnight of the end date in PT.
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParseException
+     */
     public void parse(String fileName, String startDate, String endDate) throws IOException, SAXException, ParseException {
         File file = new File(fileName);
         if (file.exists()) {
@@ -183,6 +189,15 @@ public class Checkins {
         return (total != null ? total : 0);
     }
 
+    public int totalCheckins() {
+        int total = 0;
+        for (DAYS_OF_WEEK day_of_week : DAYS_OF_WEEK.values()) {
+            total += totalForDay(day_of_week);
+        }
+        return total;
+    }
+
+
     public List<String> devWithFewestForDay(DAYS_OF_WEEK day_of_week) {
         Integer min =  Integer.MAX_VALUE;
         List<String> devsWithFewest = new ArrayList<String>();
@@ -231,4 +246,5 @@ public class Checkins {
     public Map<DAYS_OF_WEEK, Map<String, List<List<String>>>> getDetailedCheckinPerDevPerDayOfWeek() {
         return detailedCheckinPerDevPerDayOfWeek;
     }
+
 }

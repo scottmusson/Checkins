@@ -5,6 +5,7 @@ import org.xml.sax.SAXParseException;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -124,4 +125,26 @@ public class CheckinsTest {
         assertEquals(7, checkins.totalForDay(Checkins.DAYS_OF_WEEK.SATURDAY));
     }
 
+
+    @Test
+    public void checkDatesOnAndAfter() throws Exception {
+        Checkins checkins = new Checkins();
+        checkins.parse("src/test/resources/one_seven_depot.xml", "10/8/2012", null);
+        assertEquals(27, checkins.totalCheckins());
+//        Map<Checkins.DAYS_OF_WEEK, Map<String, List<List<String>>>> map = checkins.getDetailedCheckinPerDevPerDayOfWeek ();
+    }
+
+    @Test
+    public void checkDatesBefore() throws Exception {
+        Checkins checkins = new Checkins();
+        checkins.parse("src/test/resources/one_seven_depot.xml", null, "10/8/2012");
+        assertEquals(1, checkins.totalCheckins());
+    }
+
+    @Test
+    public void checkDatesBetween() throws Exception {
+        Checkins checkins = new Checkins();
+        checkins.parse("src/test/resources/one_seven_depot.xml", "10/8/2012", "10/10/2012");
+        assertEquals(5, checkins.totalCheckins());
+    }
 }
