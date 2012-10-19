@@ -1,4 +1,4 @@
-src/main/java/com/sf/checkinactivity/repo.properties
+src/main/resources/com/sf/checkinactivity/repo.properties
 .idea/*
 target/*
 CheckinActivity.iml

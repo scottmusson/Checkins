@@ -8,6 +8,8 @@ import com.perforce.p4java.exception.*;
 import com.perforce.p4java.server.IServer;
 import com.perforce.p4java.server.ServerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Properties;
@@ -19,13 +21,25 @@ public class P4Checkins {
     }
 
     public void connect(String serverName, String userName, String password, String clientName)
-            throws AccessException, ConfigException, RequestException, ConnectionException, NoSuchObjectException, ResourceException, URISyntaxException {
+            throws AccessException, ConfigException, RequestException, ConnectionException, NoSuchObjectException, ResourceException, URISyntaxException, IOException {
         Properties props = new Properties();
-        props.setProperty("userName", userName);
-        props.setProperty("password", password);
-        props.setProperty("clientname", clientName);
+        if (serverName != null ) {
+            props.setProperty("userName", userName);
+            props.setProperty("password", password);
+            props.setProperty("clientname", clientName);
+        }
+        InputStream is = null;
+        try {
+            is = this.getClass().getResourceAsStream("/com/sf/checkinactivity/repo.properties");
+            if (is != null) {
+                props.load(is);
+            }
+        } finally {
+            if (is != null) { try {is.close();} catch (Exception ignore) {} }
+        }
 
-        server = ServerFactory.getServer(serverName, props);
+        String sName = props.getProperty("servername", serverName);
+        server = ServerFactory.getServer(sName, props);
         server.connect();
     }
 
