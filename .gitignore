@@ -2,3 +2,4 @@ src/main/java/com/sf/checkinactivity/repo.properties
 .idea/*
 target/*
 CheckinActivity.iml
+tmp/*
