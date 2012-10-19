@@ -151,6 +151,7 @@ public class CheckinsTest {
     }
 
 
+/*
     @Test
     public void compareXmlToP4Direct() throws Exception {
         Checkins checkins = new Checkins();
@@ -161,4 +162,5 @@ public class CheckinsTest {
         assertEquals(checkins.totalCheckins(), p4.totalCheckins());
         assertEquals(checkins.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY), p4.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY));
     }
+*/
 }
