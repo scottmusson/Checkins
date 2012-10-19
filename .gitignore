@@ -1,5 +1,4 @@
-<<<<<<< HEAD
 src/main/java/com/sf/checkinactivity/repo.properties
-=======
-repo.properties
->>>>>>> 3dd55314ed1b5118ff0ee94d5cc27d3f8cfd8867
+.idea/*
+target/*
+CheckinActivity.iml
