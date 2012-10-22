@@ -13,13 +13,10 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RefineryUtilities;
-import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class CheckinsGraph
     extends JFrame {
@@ -177,17 +174,6 @@ public class CheckinsGraph
 
     }
 
-    // ****************************************************************************
-    // * JFREECHART DEVELOPER GUIDE                                               *
-    // * The JFreeChart Developer Guide, written by David Gilbert, is available   *
-    // * to purchase from Object Refinery Limited:                                *
-    // *                                                                          *
-    // * http://www.object-refinery.com/jfreechart/guide.html                     *
-    // *                                                                          *
-    // * Sales are used to provide funding for the JFreeChart project - please    *
-    // * support us so that we can continue developing free software.             *
-    // ****************************************************************************
-
     /**
      * Starting point for the demonstration application.
      *
@@ -197,7 +183,7 @@ public class CheckinsGraph
         if (args.length > 0) {
             Checkins checkins = new Checkins();
             try {
-                checkins.p4(Arrays.asList(new String[]{"nlipke"}), args.length > 1 ? args[0] : null, args.length > 2 ? args[1] : null);
+                checkins.p4(Arrays.asList(args[0].split(",")), args.length > 1 ? args[1] : null, args.length > 2 ? args[1] : null);
 
                 CheckinsGraph demo = new CheckinsGraph("Total Checkins per Day", checkins);
                 demo.pack();
@@ -207,7 +193,7 @@ public class CheckinsGraph
                 e.printStackTrace();
             }
         } else {
-            System.err.println("Usage: Checkins <depot xml file> or Checkins <depot xml file> <startDate e.g. 12/1/2011> or Checkins <depot xml file> <startDate e.g. 12/1/2012> <endDate>");
+            System.err.println("Usage: Checkins <comma separated list of devs e.g. dev1,dev2> <optional: startDate e.g. 12/1/2011> <optional: endDate>");
         }
     }
 }
