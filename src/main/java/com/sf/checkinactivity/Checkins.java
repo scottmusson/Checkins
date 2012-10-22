@@ -51,7 +51,7 @@ public class Checkins {
 
     /**
      * Parse an xml file that has the checkins for the given date range.  Null for start date is a date in 1995, and null for end date is *now*.
-     * @param fileName
+     * @param fileName code_swarm generated file to analyze.
      * @param startDate on or after this midnight of the startDate PT.
      * @param endDate specification of an end date will be everything before midnight of the end date in PT.
      * @throws IOException
@@ -114,10 +114,10 @@ public class Checkins {
     }
 
 
-    public void p4(String serverName, String userName, String password, String clientName, List<String> devsToAnalyze, String startDate, String endDate)
+    public void p4(List<String> devsToAnalyze, String startDate, String endDate)
             throws IOException, SAXException, ParseException, AccessException, ConfigException, RequestException, NoSuchObjectException, ResourceException, URISyntaxException, ConnectionException {
         P4Checkins p4Checkins = new P4Checkins();
-        p4Checkins.connect(serverName, userName, password, clientName);
+        p4Checkins.connect();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date start = startDate != null ? formatter.parse(startDate) : new Date(814180700000L);
         Date end = endDate != null ? formatter.parse(endDate) : new Date();

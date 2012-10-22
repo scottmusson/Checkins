@@ -1,13 +1,11 @@
 package com.sf.checkinactivity;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -150,16 +148,18 @@ public class CheckinsTest {
     }
 
 
-/*
     @Test
     public void compareXmlToP4Direct() throws Exception {
-        Checkins checkins = new Checkins();
-        checkins.parse("src/test/resources/nl_depot.xml", "10/1/2011", "10/10/2012");
-        Checkins p4 = new Checkins();
-        p4.p4(null, null, null, null,Arrays.asList(new String[] {"nlipke"}), "10/1/2011", "10/10/2012");
-        System.err.println(checkins.totalCheckins());
-        assertEquals(checkins.totalCheckins(), p4.totalCheckins());
-        assertEquals(checkins.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY), p4.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY));
+        if (getClass().getResourceAsStream(P4Checkins.PROPERTIES_FILE) != null) {
+            Checkins checkins = new Checkins();
+            checkins.parse("src/test/resources/nl_depot.xml", "10/1/2011", "10/10/2012");
+            Checkins p4 = new Checkins();
+            p4.p4(Arrays.asList("nlipke"), "10/1/2011", "10/10/2012");
+            System.err.println(checkins.totalCheckins());
+            assertEquals(checkins.totalCheckins(), p4.totalCheckins());
+            assertEquals(checkins.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY), p4.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY));
+        } else {
+            assertTrue(true);
+        }
     }
-*/
 }
