@@ -193,7 +193,7 @@ public class CheckinsGraph
                 e.printStackTrace();
             }
         } else {
-            System.err.println("Usage: Checkins <comma separated list of devs e.g. dev1,dev2> <optional: startDate e.g. 12/1/2011> <optional: endDate>");
+            System.err.println("Usage: -D" + P4Checkins.PROPERTIES_FILE_KEY + "=<path to p4 repo props> -jar  <comma separated list of devs e.g. dev1,dev2> <optional: startDate e.g. 12/1/2011> <optional: endDate>");
         }
     }
 }

@@ -8,15 +8,14 @@ import com.perforce.p4java.exception.*;
 import com.perforce.p4java.server.IServer;
 import com.perforce.p4java.server.ServerFactory;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Properties;
 
 public class P4Checkins {
     private IServer server;
+    public static final String PROPERTIES_FILE_KEY = "repoprops";
     public static final String PROPERTIES_FILE = "/com/sf/checkinactivity/repo.properties";
 
     public P4Checkins() {
@@ -26,7 +25,16 @@ public class P4Checkins {
             throws AccessException, ConfigException, RequestException, ConnectionException, NoSuchObjectException, ResourceException, URISyntaxException, IOException {
         InputStream is = null;
         try {
-            is = this.getClass().getResourceAsStream(PROPERTIES_FILE);
+            String propertiesFile = System.getProperty(PROPERTIES_FILE_KEY);
+            if (propertiesFile == null) {
+                is = this.getClass().getResourceAsStream(PROPERTIES_FILE);
+            } else {
+                File propFile = new File(propertiesFile);
+                if (!propFile.exists()) {
+                    throw new FileNotFoundException(String.format("Key: %s File: %s not found.", PROPERTIES_FILE_KEY, propertiesFile));
+                }
+                is = new FileInputStream(propFile);
+            }
             if (is != null) {
                 Properties props = new Properties();
                 props.load(is);
