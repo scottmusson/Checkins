@@ -3,7 +3,6 @@ package com.sf.checkinactivity;
 import com.perforce.p4java.core.IChangelist;
 import com.perforce.p4java.core.IChangelistSummary;
 import com.perforce.p4java.core.file.IFileSpec;
-import com.perforce.p4java.exception.*;
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -14,10 +13,12 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -114,47 +115,64 @@ public class Checkins {
     }
 
 
-    public void p4(List<String> devsToAnalyze, String startDate, String endDate)
-            throws IOException, SAXException, ParseException, AccessException, ConfigException, RequestException, NoSuchObjectException, ResourceException, URISyntaxException, ConnectionException {
-        P4Checkins p4Checkins = new P4Checkins();
-        p4Checkins.connect();
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date start = startDate != null ? formatter.parse(startDate) : new Date(814180700000L);
-        Date end = endDate != null ? formatter.parse(endDate) : new Date();
+    public void p4(List<String> devsToAnalyze, String startDate, String endDate) {
+        try {
+            final P4Checkins p4Checkins = new P4Checkins();
+            p4Checkins.connect();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            final Date start = startDate != null ? formatter.parse(startDate) : new Date(814180700000L);
+            final Date end = endDate != null ? formatter.parse(endDate) : new Date();
+            long startTick = System.currentTimeMillis();
+            ExecutorService es = Executors.newCachedThreadPool();
+            for (final String dev : devsToAnalyze) {
+                es.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
 
-        for (String dev : devsToAnalyze) {
-            List<IChangelistSummary> changelistSummaries = p4Checkins.getChangelistsForUser(dev);
-            for (IChangelistSummary changelistSummary : changelistSummaries) {
-                Date date = changelistSummary.getDate();
-                if (date != null) {
-                    IChangelist changelist = p4Checkins.describeChangelist(changelistSummary);
-                    Long timeInMillis = date.getTime();
-                    if (timeInMillis >= start.getTime() && timeInMillis <= end.getTime()) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-                        cal.setTimeInMillis(timeInMillis);
-                        LOGGER.log(Level.INFO, "Day: " + cal.get(Calendar.DAY_OF_WEEK));
-                        Map<String, List<String>> devs = dateMap.get(cal);
-                        if (devs == null) {
-                            devs = new HashMap<String, List<String>>();
-                            dateMap.put(cal, devs);
-                        }
-                        String developer = changelistSummary.getUsername();
-                        developers.add(developer);
-                        List<String> filesForDev = devs.get(developer);
-                        if (filesForDev == null) {
-                            filesForDev = new ArrayList<String>();
-                            devs.put(developer, filesForDev);
-                        }
-                        for (IFileSpec iFileSpec : changelist.getFiles(true)) {
-                            filesForDev.add(iFileSpec.getDepotPath().getPathString());
+                            List<IChangelistSummary> changelistSummaries = p4Checkins.getChangelistsForUser(dev);
+                            for (IChangelistSummary changelistSummary : changelistSummaries) {
+                                Date date = changelistSummary.getDate();
+                                if (date != null) {
+                                    IChangelist changelist = p4Checkins.describeChangelist(changelistSummary);
+                                    Long timeInMillis = date.getTime();
+                                    if (timeInMillis >= start.getTime() && timeInMillis <= end.getTime()) {
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+                                        cal.setTimeInMillis(timeInMillis);
+                                        LOGGER.log(Level.INFO, String.format("%s Day: %s", dev, dayOfWeekForCalDayOfWeek(cal.get(Calendar.DAY_OF_WEEK)).toString()));
+                                        Map<String, List<String>> devs = dateMap.get(cal);
+                                        if (devs == null) {
+                                            devs = new HashMap<String, List<String>>();
+                                            dateMap.put(cal, devs);
+                                        }
+                                        String developer = changelistSummary.getUsername();
+                                        developers.add(developer);
+                                        List<String> filesForDev = devs.get(developer);
+                                        if (filesForDev == null) {
+                                            filesForDev = new ArrayList<String>();
+                                            devs.put(developer, filesForDev);
+                                        }
+                                        for (IFileSpec iFileSpec : changelist.getFiles(true)) {
+                                            filesForDev.add(iFileSpec.getDepotPath().getPathString());
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (Throwable t) {
+                            throw new RuntimeException(t);
                         }
                     }
-                }
+                });
             }
+            es.shutdown();
+            es.awaitTermination(5, TimeUnit.MINUTES);
+            bucketToDayOfWeekPerDev();
+            bucketTotalPerDay();
+            LOGGER.info("Time to get and analyze all changelists for all developers: " + (System.currentTimeMillis() - startTick));
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
         }
-        bucketToDayOfWeekPerDev();
-        bucketTotalPerDay();
     }
 
 
