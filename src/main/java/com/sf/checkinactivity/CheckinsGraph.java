@@ -180,10 +180,10 @@ public class CheckinsGraph
      * @param args  ignored.
      */
     public static void main(String[] args) {
-        if (args.length > 0) {
+        if (args.length > 1) {
             Checkins checkins = new Checkins();
             try {
-                checkins.p4(Arrays.asList(args[0].split(",")), args.length > 1 ? args[1] : null, args.length > 2 ? args[1] : null);
+                checkins.p4(Arrays.asList(args[0].split(",")), args[1], args.length > 2 ? args[2] : null, args.length > 3 ? args[3] : null);
 
                 CheckinsGraph demo = new CheckinsGraph("Total Checkins per Day", checkins);
                 demo.pack();
@@ -193,7 +193,7 @@ public class CheckinsGraph
                 e.printStackTrace();
             }
         } else {
-            System.err.println("Usage: -D" + P4Checkins.PROPERTIES_FILE_KEY + "=<path to p4 repo props> -jar  <comma separated list of devs e.g. dev1,dev2> <optional: startDate e.g. 12/1/2011> <optional: endDate>");
+            System.err.println("Usage: -D" + P4Checkins.PROPERTIES_FILE_KEY + "=<path to p4 repo props> -jar  <comma separated list of devs e.g. dev1,dev2> <depot path, e.g. //app/...> <optional: startDate e.g. 12/1/2011> <optional: endDate>");
         }
     }
 }

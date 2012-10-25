@@ -115,7 +115,7 @@ public class Checkins {
     }
 
 
-    public void p4(List<String> devsToAnalyze, String startDate, String endDate) {
+    public void p4(List<String> devsToAnalyze, final String depotPath, String startDate, String endDate) {
         try {
             final P4Checkins p4Checkins = new P4Checkins();
             p4Checkins.connect();
@@ -130,7 +130,7 @@ public class Checkins {
                     public void run() {
                         try {
 
-                            List<IChangelistSummary> changelistSummaries = p4Checkins.getChangelistsForUser(dev);
+                            List<IChangelistSummary> changelistSummaries = p4Checkins.getChangelistsForUser(dev, depotPath);
                             for (IChangelistSummary changelistSummary : changelistSummaries) {
                                 Date date = changelistSummary.getDate();
                                 if (date != null) {

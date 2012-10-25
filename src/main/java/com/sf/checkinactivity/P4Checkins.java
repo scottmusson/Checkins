@@ -64,9 +64,9 @@ public class P4Checkins {
         }
     }
 
-    public List<IChangelistSummary> getChangelistsForUser(String userid)
+    public List<IChangelistSummary> getChangelistsForUser(String userid, String depotPath)
             throws AccessException, RequestException, ConnectionException {
-        List<IFileSpec> fileSpecs = FileSpecBuilder.makeFileSpecList(new String[]{"//app/..."});
+        List<IFileSpec> fileSpecs = FileSpecBuilder.makeFileSpecList(new String[]{depotPath});
 
         return server.getChangelists(-1, fileSpecs, null, userid, false, true, false, false);
     }
