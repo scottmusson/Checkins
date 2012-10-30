@@ -166,7 +166,7 @@ public class Checkins {
                 });
             }
             es.shutdown();
-            es.awaitTermination(5, TimeUnit.MINUTES);
+            es.awaitTermination(15, TimeUnit.MINUTES);
             bucketToDayOfWeekPerDev();
             bucketTotalPerDay();
             LOGGER.info("Time to get and analyze all changelists for all developers: " + (System.currentTimeMillis() - startTick));
