@@ -5,8 +5,12 @@ import com.perforce.p4java.core.IChangelist;
 import com.perforce.p4java.core.IChangelistSummary;
 import com.perforce.p4java.core.file.FileSpecBuilder;
 import com.perforce.p4java.core.file.IFileSpec;
-import com.perforce.p4java.exception.*;
-import com.perforce.p4java.server.IServer;
+import com.perforce.p4java.exception.AccessException;
+import com.perforce.p4java.exception.ConnectionException;
+import com.perforce.p4java.exception.P4JavaException;
+import com.perforce.p4java.exception.RequestException;
+import com.perforce.p4java.option.server.TrustOptions;
+import com.perforce.p4java.server.IOptionsServer;
 import com.perforce.p4java.server.ServerFactory;
 
 import java.io.*;
@@ -15,7 +19,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class P4Checkins {
-    private IServer server;
+    private IOptionsServer server;
     public static final String PROPERTIES_FILE_KEY = "repoprops";
     public static final String PROPERTIES_FILE = "/com/sf/checkinactivity/repo.properties";
     public static final String P4PASSWD = "P4PASSWD";
@@ -24,7 +28,7 @@ public class P4Checkins {
     }
 
     public void connect()
-            throws AccessException, ConfigException, RequestException, ConnectionException, NoSuchObjectException, ResourceException, URISyntaxException, IOException {
+            throws P4JavaException, URISyntaxException, IOException {
         InputStream is = null;
         try {
             String propertiesFile = System.getProperty(PROPERTIES_FILE_KEY);
@@ -41,8 +45,9 @@ public class P4Checkins {
                 Properties props = new Properties();
                 props.load(is);
                 String sName = props.getProperty("servername");
-                server = ServerFactory.getServer(sName, props);
+                server = ServerFactory.getOptionsServer(sName, props);
                 server.connect();
+                server.addTrust(new TrustOptions().setAutoAccept(true));
                 // First check the P4PASSWD environment variable
                 String password = System.getenv().get(P4PASSWD);
                 // if not there grab it from -D
