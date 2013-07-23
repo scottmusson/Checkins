@@ -44,6 +44,8 @@ public class Checkins {
     private Map<Calendar, Map<String, List<String>>> dateMap = new HashMap<Calendar, Map<String, List<String>>>();
     private Map<DAYS_OF_WEEK, Map<String, List<List<String>>>> detailedCheckinPerDevPerDayOfWeek = new HashMap<DAYS_OF_WEEK, Map<String, List<List<String>>>>();
     private Map<DAYS_OF_WEEK, Integer> numberOfCheckinsPerDayOfWeekPerDev = new HashMap<DAYS_OF_WEEK, Integer>();
+    private HashMap<String,Integer> totalCheckinsPerDev = new HashMap<String, Integer>();
+
     private Set<String> developers = new TreeSet<String>();
 
     public void parse(String fileName) throws IOException, SAXException, ParseException {
@@ -232,6 +234,12 @@ public class Checkins {
                 int atomicCheckinsSize = atomicCheckins != null ? atomicCheckins.size() : 0;
                 LOGGER.log(Level.INFO, day_of_week + " " + dev + ": " + atomicCheckinsSize);
                 total = total + atomicCheckinsSize;
+                Integer totalCheckins = totalCheckinsPerDev.get(dev);
+                if (totalCheckins == null) {
+                    totalCheckins = 0;
+                }
+                totalCheckins += atomicCheckinsSize;
+                totalCheckinsPerDev.put(dev, totalCheckins);
             }
             numberOfCheckinsPerDayOfWeekPerDev.put(day_of_week, total);
         }
@@ -307,6 +315,9 @@ public class Checkins {
         return devsWithMost;
     }
 
+    public Map<String,Integer> getTotalCheckinsPerDeveloper() {
+        return totalCheckinsPerDev;
+    }
 
     public String[] getDevelopers() {
         return developers.toArray(new String[developers.size()]);

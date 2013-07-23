@@ -10,3 +10,6 @@ servername=p4java(ssl)://<server:port>
 userName=p4username
 password=p4password
 clientname=foo-cs
+
+for JDK 1.7 you need to install the Unlimited Crypto libraries if you are connecting to your P4 server through SSL
+see: http://answers.perforce.com/articles/KB_Article/Using-P4Java-and-P4Eclipse-with-SSL-enabled-Perforce-Servers

@@ -17,6 +17,7 @@ import org.jfree.ui.RefineryUtilities;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Map;
 
 public class CheckinsGraph
     extends JFrame {
@@ -184,6 +185,11 @@ public class CheckinsGraph
             Checkins checkins = new Checkins();
             try {
                 checkins.p4(Arrays.asList(args[0].split(",")), args[1], args.length > 2 ? args[2] : null, args.length > 3 ? args[3] : null);
+
+                Map<String,Integer> totalCheckinsPerDeveloper = checkins.getTotalCheckinsPerDeveloper();
+                for (String dev : checkins.getDevelopers()) {
+                    System.out.println(String.format("Developer: %s \t Total: %d", dev, totalCheckinsPerDeveloper.get(dev)));
+                }
 
                 CheckinsGraph demo = new CheckinsGraph("Total Checkins per Day", checkins);
                 demo.pack();
