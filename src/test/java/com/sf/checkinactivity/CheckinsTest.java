@@ -1,5 +1,6 @@
 package com.sf.checkinactivity;
 
+import com.perforce.p4java.exception.ConnectionException;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
@@ -150,16 +151,23 @@ public class CheckinsTest {
 
     @Test
     public void compareXmlToP4Direct() throws Exception {
-        if (getClass().getResourceAsStream(P4Checkins.PROPERTIES_FILE) != null) {
-            Checkins checkins = new Checkins();
-            checkins.parse("src/test/resources/nl_depot.xml", "10/1/2011", "10/10/2012");
-            Checkins p4 = new Checkins();
-            p4.p4(Arrays.asList("nlipke"), "//app/...", "10/1/2011", "10/10/2012");
-            System.err.println(checkins.totalCheckins());
-            assertEquals(checkins.totalCheckins(), p4.totalCheckins());
-            assertEquals(checkins.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY), p4.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY));
-        } else {
-            assertTrue(true);
+        try {
+            if (getClass().getResourceAsStream(P4Checkins.PROPERTIES_FILE) != null) {
+                Checkins checkins = new Checkins();
+                checkins.parse("src/test/resources/nl_depot.xml", "10/1/2011", "10/10/2012");
+                Checkins p4 = new Checkins();
+                p4.p4(Arrays.asList("nlipke"), "//app/...", "10/1/2011", "10/10/2012");
+                System.err.println(checkins.totalCheckins());
+                assertEquals(checkins.totalCheckins(), p4.totalCheckins());
+                assertEquals(checkins.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY), p4.totalForDay(Checkins.DAYS_OF_WEEK.MONDAY));
+            } else {
+                assertTrue(true);
+            }
+        } catch (Throwable t) {
+            if (t.getCause() instanceof ConnectionException) {
+                System.err.println(t);
+            }
+            throw t;
         }
     }
 }
