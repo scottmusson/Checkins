@@ -187,10 +187,13 @@ public class CheckinsGraph
                 checkins.p4(Arrays.asList(args[0].split(",")), args[1], args.length > 2 ? args[2] : null, args.length > 3 ? args[3] : null);
 
                 System.out.println(String.format("Date Range: %s : %s%n", args[2], args.length > 3 ? args[3] : "Now"));
-                System.out.println(String.format("%14s %5s", "Developer", "#"));
+                System.out.println(String.format("%14s %5s %12s", "Developer", "#", "Complexity"));
                 Map<String,Integer> totalCheckinsPerDeveloper = checkins.getTotalCheckinsPerDeveloper();
+                Map<String,Double> checkinComplexityPerDev = checkins.getCheckinComplexitiesPerDev();
                 for (String dev : checkins.getDevelopers()) {
-                    System.out.println(String.format("%14s:%5d", dev, totalCheckinsPerDeveloper.get(dev)));
+                    System.out.println(String.format("%14s,%5d,%9.2f", 
+                    		dev, totalCheckinsPerDeveloper.get(dev),
+                    		checkinComplexityPerDev.get(dev)));
                 }
 
                 CheckinsGraph demo = new CheckinsGraph("Total Checkins per Day", checkins);

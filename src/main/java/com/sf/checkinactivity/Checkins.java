@@ -45,8 +45,11 @@ public class Checkins {
     private Map<DAYS_OF_WEEK, Map<String, List<List<String>>>> detailedCheckinPerDevPerDayOfWeek = new HashMap<DAYS_OF_WEEK, Map<String, List<List<String>>>>();
     private Map<DAYS_OF_WEEK, Integer> numberOfCheckinsPerDayOfWeekPerDev = new HashMap<DAYS_OF_WEEK, Integer>();
     private HashMap<String,Integer> totalCheckinsPerDev = new HashMap<String, Integer>();
+    private Map<String, List<Checkin>> devCheckinMap = new HashMap<String, List<Checkin>>();
+    private HashMap<String,Double> checkinComplexitiesPerDev = new HashMap<String, Double>();
 
-    private Set<String> developers = new TreeSet<String>();
+
+	private Set<String> developers = new TreeSet<String>();
 
     public void parse(String fileName) throws IOException, SAXException, ParseException {
         parse(fileName, null, null);
@@ -158,6 +161,10 @@ public class Checkins {
                                         for (IFileSpec iFileSpec : changelist.getFiles(true)) {
                                             filesForDev.add(iFileSpec.getDepotPath().getPathString());
                                         }
+                                        if (!devCheckinMap.containsKey(developer)) {
+                                        	devCheckinMap.put(developer, new ArrayList<Checkin>());
+                                        }
+                                        devCheckinMap.get(developer).add(new Checkin(dev, date, filesForDev));
                                     }
                                 }
                             }
@@ -171,6 +178,7 @@ public class Checkins {
             es.awaitTermination(15, TimeUnit.MINUTES);
             bucketToDayOfWeekPerDev();
             bucketTotalPerDay();
+            bucketComplexityIndices();
             LOGGER.info("Time to get and analyze all changelists for all developers: " + (System.currentTimeMillis() - startTick));
         } catch (Throwable t) {
             throw new RuntimeException(t);
@@ -251,6 +259,24 @@ public class Checkins {
         }
     }
 
+    protected void bucketComplexityIndices() {
+    	for(String dev : this.devCheckinMap.keySet()) {
+    		List<Checkin> checkins = devCheckinMap.get(dev);
+    		double numCheckins = checkins.size();
+    		double numFiles = 0;
+    		for(Checkin checkin : checkins) {
+    			numFiles += checkin.getFiles().size();
+    		}
+    		if (numCheckins > 0 && numFiles > 0) {
+    			checkinComplexitiesPerDev.put(dev, (1/(numCheckins/numFiles)));
+    		}
+    		else {
+    			LOGGER.log(Level.SEVERE, "Divide by zero for dev " + dev);
+    			checkinComplexitiesPerDev.put(dev, 0.0);
+    		}
+    	}
+    }
+
     public int totalForDayForDev(DAYS_OF_WEEK day_of_week, String dev) {
         int total = 0;
         Map<String, List<List<String>>> checkinsForDev = detailedCheckinPerDevPerDayOfWeek.get(day_of_week);
@@ -273,7 +299,6 @@ public class Checkins {
         }
         return total;
     }
-
 
     public List<String> devWithFewestForDay(DAYS_OF_WEEK day_of_week) {
         Integer min =  Integer.MAX_VALUE;
@@ -327,4 +352,13 @@ public class Checkins {
         return detailedCheckinPerDevPerDayOfWeek;
     }
 
+
+    public HashMap<String, Double> getCheckinComplexitiesPerDev() {
+		return checkinComplexitiesPerDev;
+	}
+
+	public void setCheckinComplexitiesPerDev(
+			HashMap<String, Double> checkinComplexitiesPerDev) {
+		this.checkinComplexitiesPerDev = checkinComplexitiesPerDev;
+	}
 }
